@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポモドーロタイマー</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <link rel="icon" href="favicon.ico">
+    <!-- <link rel="icon" href="icon.svg"> -->
+    <!-- <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
+    <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"> -->
+    
+    <style>
+        /* CSSはここに記述 */
+.popup {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.popup-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 1000px;
+    max-height: 80vh; /* ビューポートの高さの80% */
+    overflow: hidden; /* 内部のスクロールを制御 */
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-scroll {
+    overflow-y: auto; /* 縦方向のスクロールを有効化 */
+    flex-grow: 1; /* 利用可能な空間を最大限に使用 */
+    padding-right: 10px; /* スクロールバーのためのスペース */
+}
+
+/* スクロールバーのスタイリング（オプション） */
+.popup-scroll::-webkit-scrollbar {
+    width: 10px;
+}
+
+.popup-scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.popup-scroll::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+.popup-scroll::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+ul {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+li {
+  /* background-color: white; */
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+
+</style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-10 md:p-20 text-center max w-screen md:max-w-5xl">
+        <div class="space-x-2 > * flex justify-center mb-14 items-center font-bold text-blue-600"><i class="bi bi-stopwatch "></i><h1 class="text-2xl">ポモドーロタイマー</h1></div>
+        
+        <div id="timer" class=" text-blue-600 p-12 bg-white rounded-2xl mb-14 drop-shadow-lg">
+            <div id="phase" class="text-gray-600">work<span> mode</span></div>
+            <div id="time" class="pomodoro-count text-6xl md:text-9xl font-bold" >25:00</div>
+        </div>
+        
+        <div id="controls" class="mb-12">
+            <div id="stats" class="my-4">
+                <p class="text-gray-700 text-sm">完了したポモドーロ: <span id="completedPomodoros">0</span></p>
+            </div>
+            <button id="startBtn" onclick="startTimer()" class="w-36 m-2 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md drop-shadow-lg"><i class="bi bi-play-circle pr-2"></i>開始</button>
+            <button id="pauseBtn" onclick="pauseTimer()" class="w-36 m-2 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md drop-shadow-lg"><i class="bi bi-pause-circle pr-2"></i>一時停止</button>
+            <button id="resetBtn" onclick="resetTimer()" class="w-36 m-2 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md drop-shadow-lg"><i class="bi bi-arrow-clockwise pr-2"></i>リセット</button>
+            <button id="strechBtn" onclick="openPopup()" class="w-36 m-2 bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded-md drop-shadow-lg"><i class="bi bi-emoji-laughing pr-2"></i>ストレッチ</button>
+        </div>
+        <!-- <div id="stats" class="mb-4">            
+        </div>         -->
+    </div>
+
+    
+
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2>おつかれさまでした!!!</h2>
+            <div class="popup-scroll">
+            <!-- <p>これはポップアップウィンドウの内容です。</p>
+            <h3>首と肩のストレッチ</h3>
+            <p>首を左右にゆっくりと傾ける</p>
+            <p>首を前後に倒す</p>
+            <p>肩を大きく回す（前回し、後ろ回し各5回程度）</p>
+            <h3>背中のストレッチ</h3>
+            <p>両手を頭の後ろで組み、肘を後ろに引く</p>
+            <p>両手を前で組み、背中を丸めながら前に伸ばす</p>
+            <h3>手首と指のストレッチ</h3>
+            <p>手首を大きく回す</p>
+            <p>指を広げたり握ったりを繰り返す</p>
+            <h3>目の疲れを取るエクササイズ</h3>
+            <p>目を大きく開いて5秒間保持し、その後強く閉じる</p>
+            <p>目を閉じた状態で、上下左右に動かす</p> -->
+
+                <!-- <h2>ラジオ体操第一</h2> -->
+                <img src="radio_ex.jpg" alt="ラジオ体操の画像" width="100%" height="800px" loading="lazy">
+                <!-- <div class="container mx-auto p-5 bg-gray-60 rounded text-blue-600 drop-shadow-md">
+                    <ul>
+                        <li>伸びの運動</li>
+                        <li>腕を回す運動</li>
+                        <li>腕を振る運動</li>
+                        <li>胸を反らす運動</li>
+                        <li>体を横に曲げる運動</li>
+                        <li>腕を上下に伸ばす運動</li>
+                        <li>体をねじる運動</li>
+                        <li>腕を回して脚を曲げ伸ばす運動</li>
+                        <li>体を前後に曲げる運動</li>
+                        <li>腕を振って足踏みをする運動</li>
+                        <li>跳躍運動</li>
+                        <li>体を回す運動</li>
+                        <li>深呼吸</li>
+                    </ul>
+                </div> -->
+            </div>
+
+            <!-- ストレッチの時間です
+            簡単にできるストレッチをご紹介します。
+            
+            首を左右に傾け、各方向で15秒キープ
+            両肩を上げて、数秒間キープした後、リラックス
+            片腕を前に伸ばし、反対の手で軽く押して15秒キープ
+            両手を前に伸ばし、背中を丸めるようにして15秒キープ
+            椅子に座ったまま、上半身を左右にひねり、各方向で15秒キープ
+            立った状態で片足を後ろに引き、かかとを床につけて15秒キープ
+            壁に手をつき、片足を後ろに引いてかかとを床につけ、15秒キープ -->
+            <button id="strechBtn" onclick="closePopup()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded drop-shadow-lg w-max ml-auto"><i class="bi bi-check-circle pr-2 "></i>完了</button>
+            <!-- <button onclick="closePopup()">閉じる</button> -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
